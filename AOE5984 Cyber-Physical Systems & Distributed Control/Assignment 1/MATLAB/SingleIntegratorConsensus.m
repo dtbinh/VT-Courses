@@ -36,42 +36,43 @@ t_int5 = [0 40]; % spanning time
 
 
 figure (1)
-subplot(3,2,1);
+subplot(1,3,1);
 plot(t,x);
 xlabel('Time [s]');
 ylabel('States');
 legend('x_1', 'x_2', 'x_3', 'x_4', 'x_5', 'x_6');
 title('Direct graph');
 
-subplot(3,2,2);
+subplot(1,3,2);
 plot(t_un,x_un);
 xlabel('Time [s]');
 ylabel('States');
 legend('x_1', 'x_2', 'x_3', 'x_4', 'x_5', 'x_6');
 title('Undirect graph');
 
-subplot(3,2,3);
+subplot(1,3,3);
 plot(t_co,x_co);
 xlabel('Time [s]');
 ylabel('States');
 legend('x_1', 'x_2', 'x_3', 'x_4', 'x_5', 'x_6');
 title('Complete graph K^6');
 
-subplot(3,2,4);
+figure (2)
+subplot(1,3,1);
 plot(t_dt,x_dt);
 xlabel('Time [s]');
 ylabel('States');
 legend('x_1', 'x_2', 'x_3', 'x_4', 'x_5', 'x_6');
 title('Direct tree graph');
 
-subplot(3,2,5);
+subplot(1,3,2);
 plot(t_us,x_us);
 xlabel('Time [s]');
 ylabel('States');
 legend('x_1', 'x_2', 'x_3', 'x_4', 'x_5', 'x_6');
 title('Undirect star K_{1.5}');
 
-subplot(3,2,6);
+subplot(1,3,3);
 plot(t_ds,x_ds);
 xlabel('Time [s]');
 ylabel('States');
@@ -80,7 +81,7 @@ title('Direct star');
 
 
 
-figure (2)
+figure (3)
 subplot(1,3,1);
 plot(t_u6c,x_u6c);
 xlabel('Time [s]');
@@ -104,7 +105,7 @@ title('Undirected path P^5');
 
 
 
-figure (3)
+figure (4)
 subplot(2,2,1);
 plot(t_3s,xp_3s(:,1:6));
 xlabel('Time [s]');
