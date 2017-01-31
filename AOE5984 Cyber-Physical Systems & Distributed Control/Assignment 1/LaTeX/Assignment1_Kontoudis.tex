@@ -38,15 +38,70 @@ AOE 5984 Cyber-Physical Systems \& Distributed Control}
 \date{Spring 2017}
  
 \maketitle
-\begin{question}{1} %theorem, exercise, problem, or question 
-\textbf{Re-Generate Example Results}
-\end{question}
+\begin{exercise}{1} %theorem, exercise, problem, or question 
+\textbf{Single scalar integrator dynamics for local voting protocols.}
+\end{exercise}
 \begin{solution}
-We re-generated the results of the example 2.1-2. In fig. \ref{212_OST_1}, \ref{212_OC_1} are presented respectively the optimal state trajectory and the optimal control of the scalar plant $x_{k+1} = ax_k+bu_k$ for several weighting factors $r$ and initial state $x_0=1$. While in fig. \ref{212_OST_0}, \ref{212_OC_0} the same plots are depicted but for initial state $x_0=0$.
+The given graph topologies are depicted in fig \ref{graphs}. The graph topologies include a directed graph, an undirected graph, a complete graph $K^6$, a directed tree graph, an undirected star $K_{1.5}$ graph, a directed star, an undirected 6-cycle, a directed 6-cycle, and an undirected path $P^5$ respectively.
+\begin{figure}[!h]
+	\includegraphics[scale=0.31]{figures/Graphs.png}
+	\centering
+	\caption{Graph topologies.}
+	\label{graphs}
+\end{figure}
 
-Then, we re-generated the results of the example 2.4-1. In figures \ref{241_OT}, \ref{241_Resp} are presented respectively the optimal \& suboptimal feedback gains and the performance index response of the scalar plant $x_{k+1} = ax_k+bu_k$ with performance index $J_0 = \frac{1}{2}s_Nx_N + \frac{1}{2} \sum_{k=0}^{N-1}(qx_k^2+ru_k^2)$. 
+Two different scalar single integrator dynamics of a local voting protocol with agents were simulated. First, we considered the following local voting protocol for every agent $i$
+\begin{equation*}
+u_i = \sum_{j \in N_i}a_{ij}(x_j-x_i)
+\end{equation*}
+with close-loop dynamics 
+\begin{equation*}
+\dot{x_i} = u_i,
+\end{equation*}
+which can be simplified as
+\begin{equation*}
+\dot{x_i} = -d_ix_i + [a_{i1}\hspace{.2cm}...\hspace{.2cm}a_{iN}]\begin{bmatrix}
+x_1\\
+.\\
+.\\
+.\\
+x_N
+\end{bmatrix}.
+\end{equation*}
 
-Finally, we re-generated the response of the F-16 autpilot as depicted in figure \ref{F16_Resp}. It is noticed that our response signals has steps and they are not following a smooth curvature. Since we studied discrete-time systems these results were expected to present steps.  
+ The plots of the simulations are presented in fig. \ref{cgt1}, \ref{cgt2}. The fastest graph that converges is complete graph $K^6$, because all nodes are connected each other. Directed graph seem to converge slower than undirected, because the latter’s nodes  are considered to be connected in both directions. Moreover, when we have either directed star or directed tree graph all nodes converge to the leader, which do not change its initial state at all. 
+\begin{figure}[!h]
+	\includegraphics[scale=0.315]{figures/ConsensusGraphTopologies1.png}
+	\centering
+	\caption{Consensus plots for different graph topologies.}
+	\label{cgt1}
+\end{figure}
+\begin{figure}[!t]
+	\includegraphics[scale=0.315]{figures/ConsensusGraphTopologies2.png}
+	\centering
+	\caption{Consensus plots for different graph topologies.}
+	\label{cgt2}
+\end{figure}
+
+Then, the motion of two group agents was studied with node dynamics
+\begin{equation*}
+\dot{x_i}=Vcos(\theta_i),
+\end{equation*}
+\begin{equation*}
+\dot{y_i}=Vsin(\theta_i),
+\end{equation*}
+\begin{equation*}
+\theta_i = \sum_{j \in N_i}a_{ij}(\theta_j-theta_i).
+\end{equation*}
+In such case our state vector is $[x \hspace{.2cm} y \hspace{.2cm} \theta]^{\intercal}$. The plots of the simulations are presented in fig. \ref{cswarm}.
+\begin{figure}[!h]
+	\includegraphics[scale=0.315]{figures/ConsensusSwarm.png}
+	\centering
+	\caption{Consensus of headings and motion consensus in (x-y) plane for direct and direct tree graph.}
+	\label{cswarm}
+\end{figure}
+
+ 
 
 \end{solution}
 
