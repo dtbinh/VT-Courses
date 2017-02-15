@@ -51,7 +51,6 @@ Spring 2017\\
 \titlepage 
 \end{frame}
 
-
 \begin{frame}
 \frametitle{Outline} 
 \tableofcontents 
@@ -79,14 +78,14 @@ This paper provides a framework for analysis of consensus algorithms for multi-a
 \begin{frame}
 \frametitle{Consensus in Networks}
 \begin{itemize}
-\item For a directed graph $G=(V,E)$, with a set of nodes $V={1,2,...,n}$ and edges $E \subseteq V \times V$ a simple consensus algorithm of a $n$th order linear system on a graph is 
+\item For a directed graph $G=(V,E)$, with a set of nodes $V={1,2,...,n}$ and edges $E \subseteq V \times V$. A simple consensus algorithm of a $n$th order linear system on a graph is 
 \begin{equation*}
 \dot{x}_i = \sum_{j \in N_i}(x_j(t)-x_i(t))+b_i(t), \hspace{0.2cm} x_i(0)=z_i \in \mathbb{R}, b_i(t)=0
 \end{equation*}
 with collective dynamics
 $\dot{x} = -Lx$
 \item Since all row-sums of the Laplacian are zero, L has always a zero eigenvalue $\lambda_1=0$
-\item The consensus value is the avg of the initial states $a=\frac{1}{n}\sum_i z_i$
+\item The consensus value is the avg of the initial states $\alpha=\frac{1}{n}\sum_i z_i$
 \end{itemize}
 \end{frame}
 
@@ -102,10 +101,9 @@ Differences between constrained and unconstrained problems
 \vspace{0.2cm}
 To solve the $f$-consensus problem we need 
 \begin{itemize}
-\item Cooperation from all agents
 \item Willingness to participate from all agents
+\item Cooperation from all agents
 \end{itemize}
-cooperation and willing to participate from all agents
 \end{frame}
 
 %------------------------------------------------
@@ -118,7 +116,7 @@ Common consensus problems for multi-agent systems
 \begin{equation*}
 \dot{\theta}_i = \kappa \sum_{j \in N_i}sin(\theta_j-\theta_i) + \omega_i,
 \end{equation*}
-where $\omega_i$ is the frequency and $\theta_i$ the phase of the $i$th oscillator
+where $\omega_i$ is frequency and $\theta_i$ is the phase of the $i$th oscillator
 \item Flocking theory of mobile agents with sensing and communication devices, using proximity graphs
 \item Fast consensus in small-worlds deals with network design problem. The problem is addressed with either design of weights or design of topology.
 \end{itemize}
@@ -129,13 +127,11 @@ where $\omega_i$ is the frequency and $\theta_i$ the phase of the $i$th oscillat
 \begin{frame}
 \frametitle{Applications (2/2)}
 \begin{itemize}
-\item Rendezvous in space which reaches a consensus in position by a number of agents
-\item Distributed sensor fusion in sensor networks to implement or approximate a Kalman-filter, or estimate linear least-squares
+\item Rendezvous in space which reaches a consensus in position by a number of agents \vspace{.2cm}
+\item Distributed sensor fusion in sensor networks to implement or approximate a Kalman-filter, or estimate linear least-squares \vspace{.2cm}
 \item Distributed formation control
 \end{itemize}
 \end{frame}
-
-
 
 %------------------------------------------------
 \section{Information Consensus in Networked Systems}
@@ -150,7 +146,7 @@ where $\omega_i$ is the frequency and $\theta_i$ the phase of the $i$th oscillat
 \begin{equation*}
 \dot{x}_i(t) = \sum_{j \in N-i}a_{ij}(x_j(t)-x_i(t))
 \end{equation*}
-\item For undirected graphs ($a_{ij}=a_{ji}$) as $t=\infty$ results the avg of the initial states $a=\frac{1}{n}\sum_i x_i(0)$
+\item For undirected graphs ($a_{ij}=a_{ji}$) as $t=\infty$ results the avg of the initial states $\alpha=\frac{1}{n}\sum_i x_i(0)$
 \end{itemize}
 \end{frame}
 
@@ -159,9 +155,9 @@ where $\omega_i$ is the frequency and $\theta_i$ the phase of the $i$th oscillat
 \begin{frame}
 \frametitle{Laplacian expression}
 \begin{itemize}
-\item A Laplacian representation of the dynamics is given by $\dot{x} = -Lx$, where $L=D-A$
-\item For undirected graphs the Laplcian satisfies the SoS property $x^{\intercal}Lx=\frac{1}{2}\sum_{(i,j)\in E}a_{ij}(x_j-x_i)^2$
-\item By setting $\frac{1}{2}x^{\intercal}Lx=\phi(x)$ we get the gradient-descent algorithm $\dot{x}=-\nabla \phi(x)$
+\item A Laplacian representation of the dynamics is given by $\dot{x} = -Lx$, where $L=D-A$ \vspace{.2cm}
+\item For undirected graphs the Laplcian satisfies the SoS property $x^{\intercal}Lx=\frac{1}{2}\sum_{(i,j)\in E}a_{ij}(x_j-x_i)^2$ \vspace{.2cm}
+\item By setting $\frac{1}{2}x^{\intercal}Lx=\phi(x)$ we get the gradient-descent algorithm $\dot{x}=-\nabla \phi(x)$ \vspace{.2cm}
 \item For an undirected graph the algorithm converges asymptotically for all initial values
 \end{itemize}
 \end{frame}
@@ -171,23 +167,102 @@ where $\omega_i$ is the frequency and $\theta_i$ the phase of the $i$th oscillat
 
 \begin{frame}
 \frametitle{Algebraic Connectivity \& Spectral Properties}
-
+\begin{itemize}
+\item According to Gershgorin theorem, eigenvalues of the Laplacian matrix $L$ are located in a disk centered at $\Delta + 0j$ with radius $\Delta=max_i d_i$
+\item $L$ is a symmetric graph w/ real eigenvalues for undirected graphs, so the $\lambda$ can be ordered as
+\begin{equation*}
+0=\lambda_1 \leq \lambda_2 \leq ... \leq \lambda_n \leq 2\Delta
+\end{equation*}  
+\item The second smallest eigenvalue $\lambda_2$ is called algebraic connectivity of a graph and measures the performance of consensus 
+\end{itemize}
 \end{frame}
 
 %------------------------------------------------
 \subsection{Convergence Analysis for Directed Networks}
 
 \begin{frame}
-\frametitle{Convergence Analysis for Directed Networks}
+\frametitle{Strongly Connected and Balanced Graphs}
+\begin{itemize}
+\item Strongly connected graphs have a directed path that connects any two nodes
+\item For a strongly connected graph $rank(L)=n-1$ and all non-trivial eigenvalues have positive real parts
+\item For a strongly connected graph w/ $c\geq 1$ strongly connected components, $rank(L)=n-c$
+\item Balanced graph is a digraph w/ $\sum_{j\neq i}a_{ij}=\sum_{i\neq j}a_{ji}$, which means that the total weight of edges entering and leaving a node are equal for all nodes
+\item Another property of balanced digraphs is that $w=\underline{1}$ is a left eigenvector of their Laplacian, $\underline{1} ^{\intercal}L=0$
+\end{itemize}
+\end{frame}
 
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Convergence Analysis}
+\begin{itemize}
+\item For a strongly connected digraph w/ left eigenvector $\gamma=(\gamma_1, ..., \gamma_n)$ which satisfies $\gamma^{\intercal}L=0$ and follows the consensus algorithm
+\begin{equation*}
+\dot{x}_i(t)=\sum_{j\in N_i}a_{ij}(x_j(t)-x_i(t)), \hspace{.2cm} x(0)=z
+\end{equation*}
+\item A consensus is asymptotically reached for all initial states
+\item Solves the $f$-consensus problem with the linear function $f(z)=\frac{\gamma^{\intercal}z}{\gamma^{\intercal}\underline{1}}$
+\item If the digraph is balanced an avg-consensus is asymptotically reached and $\alpha=\frac{\sum_ix_i(0)}{n}$
+\end{itemize}
 \end{frame}
 
 %------------------------------------------------
 \subsection{Convergence in Discrete-Time and Matrix Theory}
 
 \begin{frame}
-\frametitle{Convergence in Discrete-Time and Matrix Theory}
+\frametitle{Discrete-Time Disrtibuted Consensus Algorithm}
+\begin{itemize}
+\item An iterative form of the consensus algorithm is
+\begin{equation*}
+x_i(k+1)=x_i(k)+\epsilon \sum_{j\in N_i}a_{ij}(x_j(k)-x_i(k))
+\end{equation*}
+\item Can be also formed as 
+\begin{equation*}
+x(k+1)=P(x(k))
+\end{equation*}
+\item $P$ is the Perron matrix of the graph $P=I-\epsilon L$, and $\epsilon>0$ is the step size 
+\end{itemize}
+\end{frame}
 
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Matrix Theory}
+Three type of matrices are introduced
+\begin{enumerate}
+\item Irreducible  matrix if its associated graph is strongly connected \vspace{.2cm}
+\item A non-negative matrix is called row (or column) stohastic if all of tis row-sums (or column-sums) are 1 \vspace{.2cm}
+\item An irreducible, stohastic matrix is primitive if it has only one eigenvalue w/ maximum modulus (maximum eigenvalue has a simple root) 
+\end{enumerate}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Perron Matrix and Step Size Properties}
+For a digraph G w/ n-nodes and maximum degree $\Delta = max_i(\sum_{j\neq i}a_{ij})$, then the Perron $P$ w/ parameters $\epsilon \in (0,\frac{1}{\Delta})$ satisfies
+\begin{itemize}
+\item P is row stohastic, non-negative matrix w/ trivial eigenvalue 1
+\item All eigenvalues P are in the unit circle
+\item If G is a balanced graph then P is a doubly stohastic graph (both row-sums and row-columns are 1)
+\item If G is strongly connected and the step is $0< \epsilon <\frac{1}{\Delta}$, then $P$ is a primitive matrix. The condition $\epsilon <\frac{1}{\Delta}$ is necessary, because if the step-size is incorrect then P would no longer be a primitive matrix (multiple eigenvalues of 1)
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Convergence in Discrete-Time}
+Consider a network of agents w/ a strongly connected digraph following the distributed network algorithm
+\begin{equation*}
+x_i(k+1)=x_i(k)+\epsilon \sum_{j\in N_i}a_{ij}(x_j(k)-x_i(k)),
+\end{equation*}
+where $0< \epsilon <\frac{1}{\Delta}$
+\begin{itemize}
+\item A consensus is asymptotically reached for all initial states
+\item The consensus value is $\alpha = \sum_iw_ix_i(0)$, w/ $\sum_i w_i = \underline{1}$
+\item If the digraph is balanced an avg consensus is asymptotically reached $\alpha=\frac{\sum_ix_i(0)}{n}$
+\end{itemize}
 \end{frame}
 
 %------------------------------------------------
