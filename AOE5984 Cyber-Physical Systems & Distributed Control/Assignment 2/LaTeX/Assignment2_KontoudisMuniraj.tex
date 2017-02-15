@@ -1,0 +1,302 @@
+\documentclass{beamer}
+
+\mode<presentation> {
+\usetheme{Malmoe} 
+\usecolortheme{beaver} 
+}
+
+\usepackage{graphicx} 
+\usepackage{booktabs} 
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{hyperref}
+\usepackage{multimedia}
+\usepackage{media9}
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks=true,       
+    linkcolor=blue,          
+    citecolor=blue,        
+    urlcolor=blue           
+}
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[CPS]{\textcolor{black}{{Consensus and cooperation in networked multi-agent systems \cite{p1}}}} 
+\subtitle[]{}
+
+\author{George Kontoudis, DevaPrakash Muniraj}
+\institute[VT] 
+{Homework 2\\
+AOE5984 Cyber-Physical Systems and Distributed Control\\
+Spring 2017\\
+\medskip
+\it{Aerospace and Ocean Engineering Department, Virginia Tech} 
+}
+\date{\today}
+
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{\vspace*{-8pt}\today 
+  \hfill\insertshortsubtitle
+  \hfill\insertpagenumber}}
+\setbeamertemplate{navigation symbols}{}
+
+\begin{document}
+
+\begin{frame}[plain]
+\titlepage 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Outline} 
+\tableofcontents 
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+%------------------------------------------------
+\section{Introduction}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Consensus \& Cooperation}
+This paper provides a framework for analysis of consensus algorithms for multi-agent network systems
+\begin{itemize}
+\item Consensus is defined as reaching an agreement regarding a certain quantity of interest that depends on the state of all agents \vspace{0.2cm}
+\item A protocol, also called consensus algorithm, is an interaction rule that specifies the exchange information between an agent and its neighbors on the network\vspace{0.2cm}
+\item Networked systems, that are included in agents, are equipped with sensing, computing, and communicating devices
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Consensus in Networks}
+\begin{itemize}
+\item For a directed graph $G=(V,E)$, with a set of nodes $V={1,2,...,n}$ and edges $E \subseteq V \times V$ a simple consensus algorithm of a $n$th order linear system on a graph is 
+\begin{equation*}
+\dot{x}_i = \sum_{j \in N_i}(x_j(t)-x_i(t))+b_i(t), \hspace{0.2cm} x_i(0)=z_i \in \mathbb{R}, b_i(t)=0
+\end{equation*}
+with collective dynamics
+$\dot{x} = -Lx$
+\item Since all row-sums of the Laplacian are zero, L has always a zero eigenvalue $\lambda_1=0$
+\item The consensus value is the avg of the initial states $a=\frac{1}{n}\sum_i z_i$
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{The $f$-Consensus problem \& Cooperation}
+Differences between constrained and unconstrained problems
+\begin{itemize}
+\item In unconstrained problems the state of all agents asymptotically become the same  
+\item In constrained problems (f-consensus problems) the state of all agents asymptotically become $f(z)$ 
+\end{itemize}
+\vspace{0.2cm}
+To solve the $f$-consensus problem we need 
+\begin{itemize}
+\item Cooperation from all agents
+\item Willingness to participate from all agents
+\end{itemize}
+cooperation and willing to participate from all agents
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Applications (1/2)}
+Common consensus problems for multi-agent systems
+\begin{itemize}
+\item Synchronization of coupled oscillators which has dynamics
+\begin{equation*}
+\dot{\theta}_i = \kappa \sum_{j \in N_i}sin(\theta_j-\theta_i) + \omega_i,
+\end{equation*}
+where $\omega_i$ is the frequency and $\theta_i$ the phase of the $i$th oscillator
+\item Flocking theory of mobile agents with sensing and communication devices, using proximity graphs
+\item Fast consensus in small-worlds deals with network design problem. The problem is addressed with either design of weights or design of topology.
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Applications (2/2)}
+\begin{itemize}
+\item Rendezvous in space which reaches a consensus in position by a number of agents
+\item Distributed sensor fusion in sensor networks to implement or approximate a Kalman-filter, or estimate linear least-squares
+\item Distributed formation control
+\end{itemize}
+\end{frame}
+
+
+
+%------------------------------------------------
+\section{Information Consensus in Networked Systems}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Information Consensus in Networked Systems}
+\begin{itemize}
+\item Consider the dynamics $\dot{x}_i=u_i$ of a graph $G=(V,E)$, that reaches consensus asymptotically
+\item The adjacency matrix is $A=[a_{ij}]$, and the set of neighbors $N_i = {j \in V : a_{ij}\ne 0}$
+\item A dynamic graph is time-varying $G(t)=(V,E(t))$ with the $A(t)$ and the linear system is a distributed consensus algorithm
+\begin{equation*}
+\dot{x}_i(t) = \sum_{j \in N-i}a_{ij}(x_j(t)-x_i(t))
+\end{equation*}
+\item For undirected graphs ($a_{ij}=a_{ji}$) as $t=\infty$ results the avg of the initial states $a=\frac{1}{n}\sum_i x_i(0)$
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Laplacian expression}
+\begin{itemize}
+\item A Laplacian representation of the dynamics is given by $\dot{x} = -Lx$, where $L=D-A$
+\item For undirected graphs the Laplcian satisfies the SoS property $x^{\intercal}Lx=\frac{1}{2}\sum_{(i,j)\in E}a_{ij}(x_j-x_i)^2$
+\item By setting $\frac{1}{2}x^{\intercal}Lx=\phi(x)$ we get the gradient-descent algorithm $\dot{x}=-\nabla \phi(x)$
+\item For an undirected graph the algorithm converges asymptotically for all initial values
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\subsection{Algebraic Connectivity \& Spectral Properties}
+
+\begin{frame}
+\frametitle{Algebraic Connectivity \& Spectral Properties}
+
+\end{frame}
+
+%------------------------------------------------
+\subsection{Convergence Analysis for Directed Networks}
+
+\begin{frame}
+\frametitle{Convergence Analysis for Directed Networks}
+
+\end{frame}
+
+%------------------------------------------------
+\subsection{Convergence in Discrete-Time and Matrix Theory}
+
+\begin{frame}
+\frametitle{Convergence in Discrete-Time and Matrix Theory}
+
+\end{frame}
+
+%------------------------------------------------
+\subsection{Performance of Consensus Algorithms}
+
+\begin{frame}
+\frametitle{Performance of Consensus Algorithms}
+
+\end{frame}
+
+%------------------------------------------------
+\subsection{Alternative Forms of Consensus Algorithms}
+
+\begin{frame}
+\frametitle{Alternative Forms of Consensus Algorithms}
+
+\end{frame}
+
+%------------------------------------------------
+\subsection{Weighted-Average Consensus}
+
+\begin{frame}
+\frametitle{Weighted-Average Consensus}
+
+\end{frame}
+
+%------------------------------------------------
+\subsection{Consensus under Communication Time-Delays}
+
+\begin{frame}
+\frametitle{Consensus under Communication Time-Delays}
+
+\end{frame}
+
+
+%------------------------------------------------
+\section{Consensus in Dynamic Networks}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Consensus in Dynamic Networks}
+
+
+\end{frame}
+
+%------------------------------------------------
+\section{Cooperation in Networked Control Systems}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Cooperation in Networked Control Systems}
+
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Collective Dynamics of Multi-Vehicle Formations}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Stability of Relative Dynamics of Formations}
+
+\end{frame}
+
+%------------------------------------------------
+\section{Simulations}
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Consensus in Complex Networks}
+
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Multi-vehicle Formation Control}
+
+
+\end{frame}
+
+%------------------------------------------------
+\section{References}
+
+\begin{frame}
+\frametitle{References}
+\footnotesize{
+\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
+
+\bibitem[Olfati, 2007]{p1} R. Olfati-Saber, J. Alex Fax, R. M. Murray (2007)
+\newblock Consensus and cooperation in networked multi-agent systems
+\newblock \emph{Proceedings of the IEEE, 95.1 215-233}, 2007.
+
+\end{thebibliography}
+}
+\end{frame}
+
+%------------------------------------------------
+\section{}
+\begin{frame}
+\begin{center}
+\Huge {Thank You!}
+\end{center}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\end{document} 
