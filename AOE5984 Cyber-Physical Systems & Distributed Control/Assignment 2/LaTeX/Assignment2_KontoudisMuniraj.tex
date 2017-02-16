@@ -127,9 +127,13 @@ where $\omega_i$ is frequency and $\theta_i$ is the phase of the $i$th oscillato
 \begin{frame}
 \frametitle{Applications (2/2)}
 \begin{itemize}
-\item Rendezvous in space which reaches a consensus in position by a number of agents \vspace{.2cm}
-\item Distributed sensor fusion in sensor networks to implement or approximate a Kalman-filter, or estimate linear least-squares \vspace{.2cm}
-\item Distributed formation control
+\item Rendezvous in space which reaches a consensus in position by a number of agents
+\item Distributed sensor fusion in sensor networks to implement or approximate a Kalman-filter, or estimate linear least-squares
+\item Distributed formation control for multi-vehicle formation are using protocols
+\begin{equation*}
+\dot{x}_i=\sum_{j \in N_i}(x_j-x_i-r_{ij})
+\end{equation*}
+where $r_{ij}$ is the desired inter-vehicle relative position vector
 \end{itemize}
 \end{frame}
 
@@ -178,6 +182,22 @@ where $\omega_i$ is frequency and $\theta_i$ is the phase of the $i$th oscillato
 \end{frame}
 
 %------------------------------------------------
+
+\begin{frame}
+\frametitle{Example of Algebraic Connectivity}
+ 
+\begin{itemize}
+\item Consider a regular network w/ 80 links
+\begin{center}
+ \includegraphics[width=.35\textwidth]{figures/Regular80links.png}
+\end{center}
+\item The Laplacian eigenvalues are
+$\lambda_1=0, \lambda_2=\lambda_3=0.48, \lambda_4=\lambda_5=1.77,\lambda_6=\lambda_7=3.44
+\lambda_8=4,\lambda_9=\lambda_{10}=4.28,\lambda_{11}=\lambda_{12}=\lambda_{13}=\lambda_{14}=5,\lambda_{15}=\lambda_{16}=5.79,\lambda_{17}=\lambda_{18}=6,\lambda_{19}=\lambda_{20}=6.24\leq 2\Delta=8$
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
 \subsection{Convergence Analysis for Directed Networks}
 
 \begin{frame}
@@ -207,7 +227,7 @@ where $\omega_i$ is frequency and $\theta_i$ is the phase of the $i$th oscillato
 \end{frame}
 
 %------------------------------------------------
-\subsection{Convergence in Discrete-Time and Matrix Theory}
+\subsection{Consensus in Discrete-Time and Matrix Theory}
 
 \begin{frame}
 \frametitle{Discrete-Time Disrtibuted Consensus Algorithm}
@@ -221,6 +241,7 @@ x_i(k+1)=x_i(k)+\epsilon \sum_{j\in N_i}a_{ij}(x_j(k)-x_i(k))
 x(k+1)=P(x(k))
 \end{equation*}
 \item $P$ is the Perron matrix of the graph $P=I-\epsilon L$, and $\epsilon>0$ is the step size 
+\item If $\lambda_j$ is the $j$th eigenvalue of L, then $\mu_j = 1-\epsilon \lambda_j$ is the $j$th eigenvalue of P 
 \end{itemize}
 \end{frame}
 
@@ -252,7 +273,7 @@ For a digraph G w/ n-nodes and maximum degree $\Delta = max_i(\sum_{j\neq i}a_{i
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Convergence in Discrete-Time}
+\frametitle{Consensus in Discrete-Time}
 Consider a network of agents w/ a strongly connected digraph following the distributed network algorithm
 \begin{equation*}
 x_i(k+1)=x_i(k)+\epsilon \sum_{j\in N_i}a_{ij}(x_j(k)-x_i(k)),
@@ -266,19 +287,83 @@ where $0< \epsilon <\frac{1}{\Delta}$
 \end{frame}
 
 %------------------------------------------------
-\subsection{Performance of Consensus Algorithms}
-
-\begin{frame}
-\frametitle{Performance of Consensus Algorithms}
-
-\end{frame}
+%\subsection{Performance of Consensus Algorithms}
+%
+%\begin{frame}
+%\frametitle{Performance of Consensus Algorithms}
+%
+%
+%\end{frame}
 
 %------------------------------------------------
 \subsection{Alternative Forms of Consensus Algorithms}
 
 \begin{frame}
-\frametitle{Alternative Forms of Consensus Algorithms}
+\frametitle{Formation Control for a Network of Multiple Vehicles CT }
+\begin{itemize}
+\item For a network of multiple vehicles a Laplacian-based system w/ weights $0-1$
+\begin{equation*}
+\dot{x}_i=\frac{1}{|N_i|}\sum_{j\in N_i}(x_j-x_i)
+\end{equation*}
+\item Adjacency elements are $a_{ij}=\frac{1}{|N_i|}=\frac{1}{d_i}$ for $j\in N_i$ and $0$  for $j\notin N_i$, so $d_i=\sum_{j\neq i}a_{ij}=1, \forall i$. That means the degree matrix is $D^{\ast}=I$ and the adjacency matrix is $A^{\ast}=D^{-1}A$
+\item Given the dynamics $\dot{x}=-Qx$, an alternative Laplacian matrix results as $Q=D^{\ast}-A^{\ast}=I-D^{-1}A$
+\end{itemize}
+\end{frame}
 
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Formation Control for a Network of Multiple Vehicles DT}
+\begin{itemize}
+\item For such case the Perron matrix becomes $P=I-\epsilon L^{\ast}, 0<\epsilon <1$
+\item The iterative consensus algorithm 
+\begin{equation*}
+x(k+1)=Px(k)=[(1-\epsilon )I-\epsilon D^{-1}A]x(k)
+\end{equation*}
+\item If we select $\epsilon =1$ the iterative consensus algorithm becomes $x(k+1)=D^{-1}Ax(k)$, which does not converge for digraph
+\item The Markov process known as random walks on a graph results for $\pi(k+1)=P\pi(k)$, w/ $\epsilon = 1$, and transition probability matrix $P=D^{-1}A$
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Autonomous Agents Using Nearest Neighbor Rules DT}
+\begin{itemize}
+\item DT consensus algorithm for undirected networks 
+\begin{equation*}
+x_i(k+1)=\frac{1}{1+|N_i|}(x_i(k)+\sum_{j\in N_i}x_j(k))
+\end{equation*}
+\item Can be also expressed as $x(k+1)=Px(k)=(I+D)^{-1}(I+A)x(k)$
+\item The Perron matrix result form the normalized Laplacian $Q_l=I-(I+D)^{-1}(I+A)$
+\item This algorithm is identical w/ the case of formation control for a network w/ multiple vehicles DT
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Different forms of Laplacians}
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline \multicolumn{4}{|c|}{\scriptsize{\textbf{Laplacian Forms}}} \\
+\hline \scriptsize{\#} &  \scriptsize{Laplacian L} & \scriptsize{Perron P} & \scriptsize{\textbf{$\epsilon$}} \\
+\hline \scriptsize{1} & \scriptsize{$D-A$}  & \scriptsize{$I-\epsilon L$} & \scriptsize{$(0,\Delta^{-1})$} \\
+\hline \scriptsize{2} & \scriptsize{$I-D^{-1}A$}  & \scriptsize{$D^{-1}A$} & \scriptsize{1}  \\
+\hline \scriptsize{3} & \scriptsize{$I-(I+D)^{-1}(I+A)$ } & \scriptsize{$(I+D)^{-1}(I+A)$} & \scriptsize{1} \\
+\hline
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item The algorithms in all three cases are in two forms
+\begin{equation*}
+\dot{x}=-Lx, \hspace{.4cm}
+x(k+1)=Px(k)
+\end{equation*}
+\item The first and the third forms guarantee stability of a DT linear system for all possible connected networks
+\item The second form needs analysis to verify P stability
+\end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -286,7 +371,17 @@ where $0< \epsilon <\frac{1}{\Delta}$
 
 \begin{frame}
 \frametitle{Weighted-Average Consensus}
-
+\begin{itemize}
+\item For weighted-average consensus  w/ a desired weighting vector $\gamma=(\gamma_1,...,\gamma_n)$ we use the algorithm
+\begin{equation*}
+K\dot{x}=-Lx, \vspace{.2cm} K=diag{\gamma_1,...,\gamma_n}
+\end{equation*} 
+\item An equivalent variable rate of integration based on the protocol
+\begin{equation*}
+\gamma_i \dot{x}_i=\sum_{j \in N_i}a_{ij}(x_j-x_i)
+\end{equation*}
+\item If the weighting is proportional to the node degrees $K=D$, we get the second form $L=I-D^{-1}A$
+\end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -294,7 +389,15 @@ where $0< \epsilon <\frac{1}{\Delta}$
 
 \begin{frame}
 \frametitle{Consensus under Communication Time-Delays}
-
+\begin{itemize}
+\item For a delay in communication between two agents the consensus algorithm becomes
+\begin{equation*}
+\dot{x}_i=\sum_{j \in N_i}a_{ij}(x_j(t-\tau)-x_i(t-\tau))
+\end{equation*}
+\item The collective dynamics remain $\dot{x}=-Lx(t-\tau)$ and by taking Laplace transform we get $X(s)= \frac{H(s)}{s}x(0)$
+\item The algorithm asymptotically solves the consensus problem $\iff$ $0\geq \tau \geq \frac{\pi}{2\lambda_n}$
+\item That condition give us a trade-off for large maximum degree and robustness, scale-free networks are fragile to time-delays while random graphs and small networks are robust
+\end{itemize}
 \end{frame}
 
 
