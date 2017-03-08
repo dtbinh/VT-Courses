@@ -27,31 +27,31 @@ clc;
 
 %% Discrete-Time w/ distributed local protocols (DLP) (1-ed_i)x_i+e\sum_j^N(x_j)
 
-% e=.24 % .4 diverges (blow up), why? e should be e<1/d_max=1/4=.25
-% x(1)=0
-% x1(1)= 6;
-% x2(1)= 3;
-% x3(1)= 2;
-% x4(1)= 5;
-% x5(1)= 0;
-% x6(1)= -1;
-% 
-% for t=1:1:20
-%     x1(t+1)= (1-e*2)*x1(t)+e*(x2(t)+x3(t));
-%     x2(t+1)= (1-e*4)*x2(t)+e*(x1(t)+x3(t)+x4(t)+x6(t));
-%     x3(t+1)= (1-e*3)*x3(t)+e*(x1(t)+x2(t)+x6(t));
-%     x4(t+1)= (1-e*2)*x4(t)+e*(x2(t)+x6(t));
-%     x5(t+1)= (1-e*2)*x5(t)+e*(x3(t)+x6(t));
-%     x6(t+1)= (1-e*3)*x3(t)+e*(x2(t)+x4(t)+x5(t));
-%     x(t+1) = x(t)+1;
-% end
-% 
-% figure (1)
-% plot (x,x1,x,x2,x,x3,x,x4,x,x5,x,x6)
-% xlabel('Time [s]');
-% ylabel('States');
-% legend('x_1', 'x_2', 'x_3', 'x_4', 'x_5', 'x_6');
-% title('DLP');
+e=.24 % .4 diverges (blow up), why? e should be e<1/d_max=1/4=.25
+x(1)=0
+x1(1)= 6;
+x2(1)= 3;
+x3(1)= 2;
+x4(1)= 5;
+x5(1)= 0;
+x6(1)= -1;
+
+for t=1:1:20
+    x1(t+1)= (1-e*2)*x1(t)+e*(x2(t)+x3(t));
+    x2(t+1)= (1-e*4)*x2(t)+e*(x1(t)+x3(t)+x4(t)+x6(t));
+    x3(t+1)= (1-e*3)*x3(t)+e*(x1(t)+x2(t)+x6(t));
+    x4(t+1)= (1-e*2)*x4(t)+e*(x2(t)+x6(t));
+    x5(t+1)= (1-e*2)*x5(t)+e*(x3(t)+x6(t));
+    x6(t+1)= (1-e*3)*x3(t)+e*(x2(t)+x4(t)+x5(t));
+    x(t+1) = x(t)+1;
+end
+
+figure (1)
+plot (x,x1,x,x2,x,x3,x,x4,x,x5,x,x6)
+xlabel('Time [s]');
+ylabel('States');
+legend('x_1', 'x_2', 'x_3', 'x_4', 'x_5', 'x_6');
+title('DLP');
 
 %% Discrete-Time w/ linear consensus algorithm (LCP) w_{ij}x_j
 
