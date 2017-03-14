@@ -17,11 +17,10 @@ names_un = {'1' '2' '3' '4' '5' '6' '7' '8' '9' '10' '11' '12' '13' '14'}; % nod
 ABgraph = graph(s_un,t_un,w_un,names_un); % create directed graph
 % Di_un = degree(ABgraph); % in degrees
 % D_un = diag(Di_un); % diagonal in-degree matrix
-% A_un = full(adjacency(ABgraph)) % adjacency matrix
+A_un = full(adjacency(ABgraph)) % adjacency matrix
 % LAB = laplacian(ABgraph); % Laplacian matrix
 
-figure
-plot(ABgraph)
+figure (1)
+plot(ABgraph,'LineWidth',2.5, 'Marker','o','NodeColor', 'r')
 set(gca,'xtick',[])
 set(gca,'ytick',[])
-title('(2,2)-Robust network Topology');
