@@ -1,0 +1,58 @@
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  
+
+\IEEEoverridecommandlockouts                             
+\overrideIEEEmargins
+
+\usepackage{graphics} 
+\usepackage{graphicx}
+\usepackage{epsfig} 
+\usepackage{mathptmx} 
+\usepackage{times} 
+\usepackage{amsmath} 
+\usepackage{amssymb}  
+\usepackage{makeidx}
+\usepackage{float}
+\usepackage{balance}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{flexisym}
+\usepackage{chngcntr}
+
+\newtheorem{assumption}{\textbf{Assumption}}
+\newtheorem{definition}{\textbf{Definition}}
+
+
+\DeclareMathOperator*{\maxi}{max}
+\DeclareMathOperator*{\mini}{min}
+
+\title{\LARGE \bf Cooperative Mobile Manipulation without Communication}
+
+\author{George P. Kontoudis}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\begin{abstract}
+A solution for the cooperative mobile manipulation problem of a group of N robots is presented. The main contribution of this methodology lies in the utilization of local information for robot coordination, without explicit communication. Local information for motion coordination is achieved through force feedback. The object's translational and rotational motion can be efficiently controlled. The proposed methodology can alter the leader either with a robot or with a human. The efficacy of the proposed method is verified through simulations, considering force analysis of agents.   
+\end{abstract}
+
+\normalsize{\bf\small\emph{Index Terms:} Mobile manipulation, cooperative control, human-robot interaction}  
+\section{Introduction}\label{intro}
+
+A multi-robot manipulation algorithm which integrates local information is presented \cite{wang2016force}. Multi-robot cooperation can be accomplished without explicit communication, but only with local information. The suggested local information is force feedback, gathered and processed individually from each robot. The leader can be either a robot or a human, but in each case operates as the dominant agent of motion planning. The desired trajectory is imposed by the leader while the followers regulate their forces according to the leader's amplitude and direction.   
+
+Multi-agent networks with communication face several problems. Communication is usually very noisy, demands high computational power, deals with uncertainty and in some cases might get vanished. The relationship of the number of nodes with communication complexity is proportional, that means for large networks a major issue lies in communication between agents. An interesting approach is to neglect communication between agents and design a strategy to attain consensus through force feedback for each agent locally. In this way, communication problems can be fully confronted, so update of the network can be managed at any time. 
+
+Robotic manipulation is an emerging field for many decades. In case we consider each robot as a finger, and each local attachment point as a contact point, then we get similar structure and properties with multi-fingered grasping and manipulation tasks \cite{murray1994mathematical}, \cite{prattichizzo2016grasping}. However, after efficiently grasp an object with several robots, we need to maintain a stable grasp by applying effective caging strategies \cite{fink2008multi}, \cite{pereira2004decentralized}. Transferring objects with multiple robots demands an untrivial motion planning approach \cite{donald1997information}, \cite{rus1995moving}. Multi-agent consensus is a similar field, which is employed to develop force consensus between agents without communication \cite{jadbabaie2003coordination}, \cite{olfati2007consensus}, \cite{ren2005consensus}. The whole procedure is bio-inspired from ant colonies, as it recognized that ants have a specific leader when they cooperate to move objects \cite{gelblum2015ant}. Moreover, ants do not explicitly communicate, but instead they employ object's vibration and/or deformation to coordinate their motion \cite{mccreery2014cooperative}. 
+
+In this project we implement 2D planar motion of robots and object $Q \in \mathbb{R}^2$. We consider $N$ robots of a set $R_i$, with $i=1, \hdots ,N$, where $R_1$ is always the leader, and the other robots are the followers. Therefore, the leader drives the system following a desired trajectory, that is unknown to the rest robots. Moreover, any form of communication is forbidden along agents. The motion control algorithm using force feedback consists of two steps. First, the followers need to recognize the leader's force magnitude and direction, by employing force feedback. Then, the followers have to cooperate and provoke a resultant force in the same direction and with larger amplitude.  Furthermore, two different force analyses were occurred as object shape and mass may be varied. In the first case, an analysis of drugging moderate objects is presented, while in the second case an analysis for heavy objects, which assumed to be placed on a moving platform, is provided. 
+
+Difficulties that we expect to face are to determine whether this technique is accurate and robust in terms of following the desirable trajectory of the leader and not damage the object. Then, the performance of the proposed technique should exceed the performance of cooperative multi-robot systems with explicit communication. Simulation of the problem is ideal to be implemented, but it also accounts of avoiding collision for every agent. Therefore, we study a cooperative mobile manipulation technique without communication, by simulating the force magnitude and direction tracking of the leader from the follower agents.
+
+\bibliographystyle{IEEEtrans}
+\bibliography{IEEEabrv,mybib}
+
+\end{document}
