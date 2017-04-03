@@ -26,7 +26,7 @@
 \DeclareMathOperator*{\maxi}{max}
 \DeclareMathOperator*{\mini}{min}
 
-\title{\LARGE \bf Online Perception of Articulated Objects with Fetch}
+\title{\LARGE \bf Online Perception of Articulated Objects for Manipulation}
 
 \author{Jia Guo, George Kontoudis}
 
@@ -36,19 +36,48 @@
 \pagestyle{empty}
 
 \begin{abstract}
-An online interactive perception methodology for articulated objects in unstructured environment is presented. The main contribution of this methodology lies in the online solution, utilizing recursive Bayesian estimation techniques. The RGB-D algorithm consist of three sub recursive estimation problems and each one forms a separate level of estimation. In this way, we can get uncomplicated solution at each level which feed forward and backward information to guarantee robustness, accuracy, and uncertainty elimination. The efficacy of the proposed method is verified through robot manipulation experiments.     
+An online interactive perception methodology for articulated objects in unstructured environment is presented. The main contribution of this methodology lies in the online solution, which utilize recursive Bayesian estimation techniques. The RGB-D algorithm consist of three sub-recursive estimation problems and each one forms a separate level of estimation. In this way, we can get uncomplicated solution at each level which feed forward and backward information to guarantee robustness, accuracy, and uncertainty elimination. The efficacy of the proposed method is verified through robot manipulation experiments.     
 \end{abstract}
 
 \normalsize{\bf\small\emph{Index Terms:} Online perception, recursive Bayesian estimation, manipulation}  
 
 \section{Introduction}\label{intro}
-An online mutli-level interactive perception algorithm is presented \cite{martin2014online}, \cite{martin2016integrated}. Grasping and manipulation in unstructured environments requires knowledge of the object's shape, position, orientation, and kinematic structure. Visual perception could be a solution to successfully get the information needed for robotic manipulation. Although, it becomes non-trivial to address this problem online and estimate robust solutions. However, the allocation to sub-level algorithms which interconnect problems simplify the overall solution.
+An online mutli-level interactive perception algorithm is presented \cite{martin2014online}, \cite{martin2016integrated}. Grasping and manipulation in unstructured environments require knowledge of the object's shape, position, orientation, and kinematic structure. Visual perception could be a solution to successfully get the information needed for robotic manipulation. Although, it becomes non-trivial to online address this problem and estimate robust solutions. However, the allocation to sub-level algorithms which are interconnected, simplify the overall solution.
 
-In this project we deal with online interactive perception algorithm for robotic manipulation purposes. The algorithm includes the identification of the object's shape, the recognition of its kinematic structure, and the motion tracking of its position and orientation. The proposed algorithm derives the shape, position, orientation, velocities of the explored object along with the kinematic structure. The object's position, orientation, and estimation of kinematic structure part incorporates three recursive Bayesian estimation steps. Then, the shape reconstruction of the investigated object is addressed which thrust the motion tracking.
+In this project we deal with online interactive perception algorithm for robotic manipulation purposes. The algorithm includes the identification of the object's shape, the recognition of its kinematic structure, and the motion tracking of its position and orientation. Moreover, the derivation of the explored object's shape, position, orientation, along with the kinematic structure is achieved. The object's position, orientation, and estimation of kinematic structure part incorporates three recursive Bayesian estimation steps. Then, the shape reconstruction of the investigated object is addressed that thrust the motion tracking.
 
 Robotic manipulation is an emerging field for many decades. \cite{chang2012interactive}, \cite{sturm2010vision}, \cite{katz2014interactive}, \cite{thrun2005probabilistic}, \cite{tomasi1991detection}, \cite{brock2009learning}, \cite{krainin2011manipulator}, \cite{wuthrich2013probabilistic}, \cite{choi2013rgb}, \cite{mishra2009active}, \cite{yuheng2013star3d}, \cite{herbst2014toward}, \cite{pomerleau2011tracking}.
 
+The remainder of this report is organized as follows. Section \ref{pf} analyse the problem formulation of the method. Algorithm representation is provided in section \ref{algAn}. Then, the efficacy of the proposed methodology is assessed in Section \ref{experim} by a set of experiments. Section \ref{resul} discusses the results of this project. Finally, Section \ref{concl} provides the conclusions of the studied methodology and gives directions for future work.  
+
 % Then, object's motion segmentation is performed to identify motion variations.
+
+\section{Problem Formaulation}\label{pf}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Algorithm Analysis}\label{algAn}
+
+\section{Experiments}\label{experim}
+
+\section{Results}\label{resul}
+
+\section{Conclusions}\label{concl}
 
 \bibliographystyle{IEEEtrans}
 \bibliography{IEEEabrv,mybib}
