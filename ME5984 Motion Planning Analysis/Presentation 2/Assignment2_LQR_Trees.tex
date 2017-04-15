@@ -81,9 +81,10 @@ Spring 2017\\
 %------------------------------------------------
 \section{Direct Computation of Lyapunov Functions}
 %------------------------------------------------
+\subsection{Lyapunov Functions}
 
 \begin{frame}
-\frametitle{Lyapunov Functions}
+\frametitle{Definition of Lyapunov Functions}
 For a given dynamical system
 \begin{equation*}
 \dot{x} = f(x), \vspace{.2cm} f(0)=0
@@ -98,12 +99,33 @@ If conditions met in some state space ball $B_r$, then origin is a.s.
 \end{frame}
 
 %------------------------------------------------
+\begin{frame}
+\frametitle{Sequential Composition of Lyapunov Functions}
 
+\begin{columns}[c] 
+\column{.56\textwidth}
+\begin{itemize}
+\item Each funnel acts like a valid Lyapunov function \vspace{0.2cm}
+\item A.s. of each Lyapunov falls in the region of attraction of the next lower level \vspace{0.2cm}
+\item The lowest function stabilizes in the goal point
+\end{itemize}
+
+\column{.54\textwidth} 
+\centering
+ \includegraphics[width=.5\textwidth]{figures/SeqentialLyapunov_Funnels.png}\\
+Sequential composition of funnels  \cite{p2}
+\end{columns}
+
+\end{frame}
+
+
+%------------------------------------------------
+\subsection{Sum of Squares Validation}
 \begin{frame}
 \frametitle{Sums of Squares}
-We want to check inequalities using sums-of-squares (SoS) method \vspace{.2cm}
-
-For a given polynomial $x^4+2x^3+3x^2-2x+2 \geq 0, \hspace{.2cm} \forall x \in \mathbb{R}$, we can employ SoS
+We want to check inequalities and validate Lyapunov functions using sums-of-squares (SoS) method \cite{p3}\vspace{.2cm}
+\begin{itemize}
+\item $x^4+2x^3+3x^2-2x+2 \geq 0, \hspace{.2cm} \forall x \in \mathbb{R}$, by employing SoS
 \begin{equation*}
 x^4+2x^3+3x^2-2x+2= \begin{bmatrix}
 1\\
@@ -119,8 +141,8 @@ x\\
 x^2
 \end{bmatrix} = X^{\intercal}AX
 \end{equation*}
-
-The eigenvalues of A are $\lambda_1=3.88$, $\lambda_2=1.65$, $\lambda_1=0.47$, so the inequality stands $\forall x \in \mathbb{R}$
+\item Eigenvalues of A are $\lambda_1=3.88$, $\lambda_2=1.65$, $\lambda_1=0.47$, so the inequality stands $\forall x \in \mathbb{R}$
+\end{itemize}
 
 \end{frame}
 
@@ -128,7 +150,7 @@ The eigenvalues of A are $\lambda_1=3.88$, $\lambda_2=1.65$, $\lambda_1=0.47$, s
 
 \begin{frame}
 \frametitle{Sums of Squares Properties}
-The general structure of (SoS) for a 4-$th$ order polynomial is \vspace{.2cm}
+General structure of (SoS) for a 4-$th$ order polynomial is \vspace{.2cm}
 
 \begin{equation*}
 fx^4+2ex^3+(d+2c)x^2+2bx+a= \begin{bmatrix}
@@ -156,16 +178,35 @@ x^2
 
 \begin{frame}
 \frametitle{Feedback Synthesis by SoS Optimization}
-Given a system $\dot{x} = f(x) + g(x)u$ we want to simultaneously generate
+Given a system $\dot{x} = f(x) + g(x)u$ we want to generate
 \begin{itemize}
 \item Feedback control law $u=\pi (x)$
-\item Lyapunov fcn $V(x)$, s.t.  $V(x)>0$, $\dot{V}(x)=\frac{\partial V}{\partial x}\frac{\partial x}{\partial t}=\frac{\partial V}{\partial x}\dot{x}$ be negative definite \vspace{.2cm}
-\end{itemize}
+\item Lyapunov fcn $V(x)$, s.t.  $V(x)>0$, $\dot{V}(x)=\frac{\partial V}{\partial x}\frac{\partial x}{\partial t}=\frac{\partial V}{\partial x}\dot{x}<0$ 
+\end{itemize}\vspace{.5cm}
 BUT, this is a difficult problem as the set of $V(x)$, $\pi(x)$ may not be convex sets
 \begin{itemize}
-\item Rely on LQR synthesis \vspace{.2cm}
-\item Design a series of locally-valid controllers \vspace{.2cm}
+\item Rely on LQR synthesis 
+\item Design a series of locally-valid controllers 
 \item Compose these controllers utilizing feedback motion planning
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\subsection{Complementary - Pontryagin's Principle}
+
+\begin{frame}
+\frametitle{The Minimum Principle}
+The first order or necessary condition for optimality is called \textit{Maximum (Minimum) Principle} 
+\begin{itemize}
+\item Given a function we want to minimize $f(x,y,z)$ on a level surface (constraint) $g(x,y,z)$ we get
+\begin{equation*}
+  \nabla f =\lambda \nabla g
+\end{equation*} 
+\item To convert a constrained problem to an unconstrained we construct the Hamiltonian function 
+\begin{equation*}
+  H(x,u,t,\lambda )= L(x,u,t)+ \lambda^{\intercal}f(x,u,t)
+\end{equation*}   
 \end{itemize}
 \end{frame}
 
@@ -173,21 +214,23 @@ BUT, this is a difficult problem as the set of $V(x)$, $\pi(x)$ may not be conve
 \section{Linear Feedback Design and Verification}
 %------------------------------------------------
 
+\subsection{Continuous time LQR}
+
 \begin{frame}
-\frametitle{Non-linear System}
+\frametitle{Goal Stabilization}
 \begin{itemize}
 \item For a given non-linear dynamical system
 \begin{equation*}
-\dot{x} = f(x,u), \hspace{.2cm} x\in \mathbb{R}^n, \hspace{.2cm} u\in \mathbb{R}^m 
+\dot{x} = f(x,u,t), \hspace{.2cm} x\in \mathbb{R}^n, \hspace{.2cm} u\in \mathbb{R}^m 
 \end{equation*} 
 \item Set goal state $x_G$, where $f(x_G,u_G)=0$, and $\bar{x}=x-x_G$, $\bar{u}=u-u_G$
 \item Linearize around ($x_G, u_G$), $\bar{x}\approx A\bar{x}(t)+B\bar{u}(t)$ 
-\item Define infinite horizon LQR minimum energy cost-to-go fcn
+\item Infinite horizon LQR minimum energy cost-to-go fcn (performance index)
 \begin{equation*}
-J(\bar{x}^{\prime})= \int_0^{\infty} [ \bar{x}^{\intercal}(t)Q\bar{x}(t)+\bar{u}^{\intercal}(t)R\bar{u}(t)]dt,
+J_{\infty}= \frac{1}{2}\int_0^{\infty} [ \bar{x}^{\intercal}(t)Q\bar{x}(t)+\bar{u}^{\intercal}(t)R\bar{u}(t)]dt,
 \end{equation*}
 \begin{equation*}
-Q=Q^{\intercal}\geq 0, R=R^{\intercal}> 0, \bar{x}(0)=\bar{x}^{\prime}
+Q=Q^{\intercal}\geq 0, R=R^{\intercal}> 0
 \end{equation*}
 \end{itemize}
 \end{frame}
@@ -195,17 +238,41 @@ Q=Q^{\intercal}\geq 0, R=R^{\intercal}> 0, \bar{x}(0)=\bar{x}^{\prime}
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Stabilizing Goal State}
-\begin{itemize}
-\item Solution of inf horizon LQR problem results the optimal cost
+\frametitle{Hamiltonian System}
+Set the Hamiltonian 
 \begin{equation*}
-J^{\ast}(\bar{x})=\bar{x}^{\intercal}S\bar{x}
+H(x,u,t)= L(x,u,t)+\lambda^{\intercal} f(x,u,t)
 \end{equation*} 
-\item S is a positive definite matrix, w/ the solution given from ARE
+\begin{itemize}
+\item State equation
+\begin{equation*}
+\dot{x}=\frac{\partial H}{\partial \lambda}
+\end{equation*}
+\item Costate equation
+\begin{equation*}
+-\dot{\lambda} = \frac{\partial H}{\partial x}=\frac{\partial f^{\intercal}}{\partial x}\lambda + \frac{\partial L}{\partial x}
+\end{equation*}
+\item Stationarity condition
+\begin{equation*}
+0 = \frac{\partial H}{\partial u}=\frac{\partial f^{\intercal}}{\partial u}\lambda + \frac{\partial L}{\partial u}
+\end{equation*}
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Riccati Equation and Optimal Control Law}
+\begin{itemize}
+\item Infinite horizon LQR problem results the optimal cost
+\begin{equation*}
+J^{\ast}(\bar{x})=\frac{1}{2}\bar{x}^{\intercal}S\bar{x}
+\end{equation*} 
+\item $S > 0$, w/ the solution given from ARE
 \begin{equation*}
 0=Q-SBR^{-1}B^{\intercal}S+SA+A^{\intercal}S
 \end{equation*}
-\item The optimal feedback closed loop control policy is given
+\item Optimal feedback closed loop control policy 
 \begin{equation*}
 \bar{u}^{\ast}=-R^{-1}B^{\intercal}S\bar{x}=-Kx
 \end{equation*}
@@ -214,7 +281,58 @@ J^{\ast}(\bar{x})=\bar{x}^{\intercal}S\bar{x}
 
 
 %------------------------------------------------
-\subsection{Time-Invariant LQR Verification}
+\subsection{State LQR Verification}
+
+\begin{frame}
+\frametitle{Goal State Convergence}
+The domain of attraction of the LQR over some sub-level set
+\begin{equation*}
+B_G(\rho)=\{ x|0\leq V(x) \leq \rho \} 
+\end{equation*} 
+To guarantee a.s. we require $V(x)$ to be a valid Lyapunov function
+\begin{itemize}
+\item $V(x)>0, \hspace{.2cm} x\in B_G(\rho)$
+\item $\dot{V}(x)<0, \hspace{.2cm} x\in B_G(\rho)$
+\end{itemize}
+\vspace{.4cm}
+Assign $V(x)=J^{\ast}(\bar{x})$ 
+\begin{itemize}
+\item By definition positive definite
+\item $\dot{V}(x)=\dot{J}(\bar{x})=\frac{dV}{dx} \frac{dx}{dt} = 2\bar{x}^{\intercal}S\dot{x} = 2\bar{x}^{\intercal}Sf(x_G+\bar{x}, u_G-K\bar{x}) $
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Lyapunov Verification Using SoS}
+We require 
+\begin{equation*}
+\dot{J}^{\ast}(\bar{x})<0, \hspace{.2cm} \forall\bar{x} \neq 0
+\end{equation*} 
+First, convert the inequality 
+\begin{itemize}
+\item $V(x)>0, \hspace{.2cm} x\in B_G(\rho)$
+\item $\dot{V}(x)<0, \hspace{.2cm} x\in B_G(\rho)$
+\end{itemize}
+\vspace{.4cm}
+Assign $V(x)=J^{\ast}(\bar{x})$ 
+\begin{itemize}
+\item By definition positive definite
+\item $\dot{V}(x)=\dot{J}(\bar{x})=\frac{dV}{dx} \frac{dx}{dt} = 2\bar{x}^{\intercal}S\dot{x} = 2\bar{x}^{\intercal}Sf(x_G+\bar{x}, u_G-K\bar{x}) $
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\subsection{Trajectory Optimization}
+\begin{frame}
+\frametitle{Trajectory Optimization}
+
+\end{frame}
+
+%------------------------------------------------
+\subsection{Trajectory LQR Verification}
 
 \begin{frame}
 \frametitle{Time-Invariant LQR Verification}
@@ -232,25 +350,13 @@ J^{\ast}(\bar{x})=\bar{x}^{\intercal}S\bar{x}
 
 %----------------------------------------------
 
-\subsection{Conclusions}
+\section{Conclusions}
 \begin{frame}
 \frametitle{Conclusions}
 
 \begin{itemize}
 \item 
 \end{itemize}
-\end{frame}
-%----------------------------------------------
-
-\subsection{Summary}
-
-\begin{frame}
-\frametitle{Summary}
-
-\begin{itemize}
-\item 
-\end{itemize}
-
 \end{frame}
 
 %------------------------------------------------
@@ -262,20 +368,18 @@ J^{\ast}(\bar{x})=\bar{x}^{\intercal}S\bar{x}
 \footnotesize{
 \begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
 
-%@article{tedrake2010lqr,
-%  title={LQR-trees: Feedback motion planning via sums-of-squares verification},
-%  author={Tedrake, Russ and Manchester, Ian R and Tobenkin, Mark and Roberts, John W},
-%  journal={The International Journal of Robotics Research},
-%  volume={29},
-%  number={8},
-%  pages={1038--1052},
-%  year={2010},
-%  publisher={SAGE Publications Sage UK: London, England}
-%}
-
-\bibitem[Tedrake, 2010]{p1} Tedrake Russ, Manchester Ian, Tobenkin Mark and Roberts John
+\bibitem[Tedrake, 2010]{p1} R. Tedrake, I. Manchester, M. Tobenkin, and J. Roberts
 \newblock LQR-trees: Feedback motion planning via sums-of-squares verification
 \newblock \emph{International Journal of Robotics Researchs, 1038--1052, SAGE Publications}, 2010.
+
+\bibitem[Burridge, 1999]{p2} R. Burridge, A. Rizzi, and D. Koditschek
+\newblock Sequential composition of dynamically dexterous robot behaviors
+\newblock \emph{International Journal of Robotics Researchs, 534--555, SAGE Publications}, 1999.
+
+\bibitem[Parrilo, 2000]{p3} P.Parrilo
+\newblock Structured semidefinite programs and semialgebraic geometry methods in robustness and optimization
+\newblock \emph{Ph.D. Theis, MIT}, 2000.
+
 
 \end{thebibliography}
 }
