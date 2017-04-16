@@ -1,4 +1,4 @@
-\documentclass{beamer}
+ \documentclass{beamer}
 
 %\usefonttheme{professionalfonts} % using non standard fonts for beamer
 %\usefonttheme{serif} % default family is serif
@@ -71,10 +71,10 @@ Spring 2017\\
 \begin{frame}
 \frametitle{Motivation}
 \begin{itemize}
-\item Evaluate regions of stability for nonlinear systems \vspace{0.2cm}
-\item  \vspace{0.2cm}
-\item  \vspace{0.2cm}
-\item  \vspace{0.2cm}
+\item  Design robust algorithms for non-linear feedback motion planning \vspace{0.3cm}
+\item  Non-linear underactuted systems such as robot manipulator or bipedal walking\vspace{0.3cm}
+\item  Computation of planning regions of attraction (funnels) for non-linear underactuated dynamical systems \vspace{0.3cm}
+\item Applicable to real robots
 \end{itemize}
 \end{frame}
 
@@ -262,7 +262,7 @@ H(x,u,t)= L(x,u,t)+\lambda^{\intercal} f(x,u,t)
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Riccati Equation and Optimal Control Law}
+\frametitle{Riccati equation and Optimal Control Law}
 \begin{itemize}
 \item Infinite horizon LQR problem results the optimal cost
 \begin{equation*}
@@ -295,7 +295,7 @@ To guarantee a.s. we require $V(x)$ to be a valid Lyapunov function
 \item $\dot{V}(x)<0, \hspace{.2cm} x\in B_G(\rho)$
 \end{itemize}
 \vspace{.4cm}
-Assign $V(x)=J^{\ast}(\bar{x})$ 
+Assign $V(x)=J^{\ast}(\bar{x}) = \frac{1}{2}\bar{x}^{\intercal}S\bar{x}$
 \begin{itemize}
 \item By definition positive definite
 \item $\dot{V}(x)=\dot{J}(\bar{x})=\frac{dV}{dx} \frac{dx}{dt} = 2\bar{x}^{\intercal}S\dot{x} = 2\bar{x}^{\intercal}Sf(x_G+\bar{x}, u_G-K\bar{x}) $
@@ -308,19 +308,71 @@ Assign $V(x)=J^{\ast}(\bar{x})$
 \frametitle{Lyapunov Verification Using SoS}
 We require 
 \begin{equation*}
-\dot{J}^{\ast}(\bar{x})<0, \hspace{.2cm} \forall\bar{x} \neq 0
+\dot{J}^{\ast}(\bar{x})<0, \hspace{.4cm} \forall\bar{x} \neq 0 \in B_G(\rho), \hspace{.4cm} \dot{J}^{\ast}(0)=0
 \end{equation*} 
-First, convert the inequality 
 \begin{itemize}
-\item $V(x)>0, \hspace{.2cm} x\in B_G(\rho)$
-\item $\dot{V}(x)<0, \hspace{.2cm} x\in B_G(\rho)$
+\item First, modify the inequality from negative to non-positive 
+\begin{equation*}
+\dot{J}^{\ast}(\bar{x})\leq -\epsilon ||\bar{x}||_2^2, \hspace{.4cm} \forall \bar{x}\in B_G(\rho),\hspace{.4cm} \epsilon \in \mathbb{R}^+
+\end{equation*}
+\item Second, include the constraint with Lagrange multiplier $h(\cdot)$
+\begin{equation*}
+\dot{J}^{\ast}(\bar{x})+ h(\bar{x})(\rho - J^{\ast}(\bar{x}))\leq -\epsilon ||\bar{x}||_2^2
+\end{equation*}
 \end{itemize}
-\vspace{.4cm}
-Assign $V(x)=J^{\ast}(\bar{x})$ 
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Lagrange Mulitplier Searching}
 \begin{itemize}
-\item By definition positive definite
-\item $\dot{V}(x)=\dot{J}(\bar{x})=\frac{dV}{dx} \frac{dx}{dt} = 2\bar{x}^{\intercal}S\dot{x} = 2\bar{x}^{\intercal}Sf(x_G+\bar{x}, u_G-K\bar{x}) $
+\item If $f^{(cl)}(x,u)=f(x,u_G-K(x-x_g))$, search for $h(\cdot)$ polynomial with sufficient order for $\dot{J}^{\ast}(\bar{x})$, using SoS
+\begin{center}
+\begin{tabular}{ r l }
+find & $h(\bar{x})$ \\
+subject to & $\dot{J}^{\ast}(\bar{x})+ h(\bar{x})(\rho - J^{\ast}(\bar{x}))\leq -\epsilon ||\bar{x}||_2^2$\\
+ & $h(\bar{x})\geq 0$
+\end{tabular}
+\end{center}
+\item If $f^{(cl)}(x)\approx \hat{f}^{(cl)}(\bar{x})$, where $\hat{f}^{(cl)}(\bar{x})$ is the Taylor expansion (algebraic approximation) and $\hat{\dot{J}}(\bar{x})=2\bar{x}^{\intercal}S\hat{f}^{(cl)}(\bar{x})$
+\begin{center}
+\begin{tabular}{ r l }
+find & $h(\bar{x})$ \\
+subject to & $\hat{\dot{J}}(\bar{x})+ h(\bar{x})(\rho - \hat{J}^{\ast}(\bar{x}))\leq -\epsilon ||\bar{x}||_2^2$\\
+ & $h(\bar{x})\geq 0$
+\end{tabular}
+\end{center}
 \end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Optimization for $\rho$}
+Set a convex optimization problem for the region of attraction 
+\begin{center}
+\begin{tabular}{ r l }
+max & $\rho$ \\
+subject to & $\hat{\dot{J}}^{\ast}(\bar{x})+ h(\bar{x})(\rho - \hat{J}^{\ast}(\bar{x}))\leq -\epsilon ||\bar{x}||_2^2$\\
+ & $h(\bar{x})\geq 0$\\
+ & $\rho>0$
+\end{tabular}
+\end{center}
+\begin{columns}[c] 
+\column{.56\textwidth}
+\begin{itemize}
+\item At each step the Lagrange multiplier searching is performed
+\item If the program is feasible $\rho$ increased 
+\end{itemize}
+
+\column{.56\textwidth}
+\centering
+ \includegraphics[width=.95\textwidth]{figures/PolynomialVerification.png}\\
+Polynomial verification of damped single pendulum  \cite{p1}
+\end{columns}
+
 \end{frame}
 
 %------------------------------------------------
@@ -341,22 +393,10 @@ Assign $V(x)=J^{\ast}(\bar{x})$
 
 %------------------------------------------------
 
-
-
-
-
-
-
-
-%----------------------------------------------
-
 \section{Conclusions}
 \begin{frame}
 \frametitle{Conclusions}
 
-\begin{itemize}
-\item 
-\end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -368,13 +408,42 @@ Assign $V(x)=J^{\ast}(\bar{x})$
 \footnotesize{
 \begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
 
+%@article{tedrake2010lqr,
+%  title={LQR-trees: Feedback motion planning via sums-of-squares verification},
+%  author={Tedrake, Russ and Manchester, Ian R and Tobenkin, Mark and Roberts, John W},
+%  journal={The International Journal of Robotics Research},
+%  volume={29},
+%  number={8},
+%  pages={1038--1052},
+%  year={2010},
+%  publisher={SAGE Publications Sage UK: London, England}
+%}
+
 \bibitem[Tedrake, 2010]{p1} R. Tedrake, I. Manchester, M. Tobenkin, and J. Roberts
 \newblock LQR-trees: Feedback motion planning via sums-of-squares verification
 \newblock \emph{International Journal of Robotics Researchs, 1038--1052, SAGE Publications}, 2010.
 
+%@article{burridge1999sequential,
+%  title={},
+%  author={Burridge, Robert R and Rizzi, Alfred A and Koditschek, Daniel E},
+%  journal={The International Journal of Robotics Research},
+%  volume={18},
+%  number={6},
+%  pages={534--555},
+%  year={1999},
+%  publisher={Sage Publications}
+%}
+
 \bibitem[Burridge, 1999]{p2} R. Burridge, A. Rizzi, and D. Koditschek
 \newblock Sequential composition of dynamically dexterous robot behaviors
 \newblock \emph{International Journal of Robotics Researchs, 534--555, SAGE Publications}, 1999.
+
+%@phdthesis{parrilo2000structured,
+%  title={Structured semidefinite programs and semialgebraic geometry methods in robustness and optimization},
+%  author={Parrilo, Pablo A},
+%  year={2000},
+%  school={Citeseer}
+%}
 
 \bibitem[Parrilo, 2000]{p3} P.Parrilo
 \newblock Structured semidefinite programs and semialgebraic geometry methods in robustness and optimization
