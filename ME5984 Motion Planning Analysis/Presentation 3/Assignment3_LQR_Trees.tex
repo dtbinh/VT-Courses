@@ -22,6 +22,15 @@
 \usepackage{amsmath}
 \usetikzlibrary{calc,positioning}
 \usepackage{xcolor}
+\usepackage{calrsfs}
+\usepackage[utf8]{inputenc}
+\usepackage{boondox-calo}
+	   %\usepackage{boondox-cal}
+       %\usepackage{dutchcal}
+       %\usepackage{bickham}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+%\usepackage[noend]{algpseudocode}
 \hypersetup{
     colorlinks=true,       
     linkcolor=blue,          
@@ -376,7 +385,7 @@ subject to & $\hat{\dot{J}}^{\ast}(\bar{x})+ h(\bar{x})(\rho - \hat{J}^{\ast}(\b
 
 \end{frame}
 
-%------------------------------------------------
+%-------------------------------------------------
 
 \subsection{Trajectory Optimization}
 
@@ -401,6 +410,24 @@ J=\int_{t_0}^{t_f}[1+u_0^{\intercal}Ru_0] dt
 
 %------------------------------------------------
 
+\begin{frame}
+\frametitle{Discarded Sampling Points}
+\begin{itemize}
+\item Trajectory opitmization algorithms are local \vspace{.2cm}
+\item Employed to test validity of sampling points \vspace{.2cm}
+\item If trajectory optimization fails the point is discarded \vspace{.2cm}
+\item Algorithms have specific time restriction to improve faster sampling \vspace{.2cm}
+\item Final tree constraint specifies whether the computed trajectory will connect w/ the tree 
+\begin{equation*}
+\min\limits_{x^{\prime}\in \mathbcal{T}_{k-1}} ||x_0(t_f)-x^{\prime}||_2=0,
+\end{equation*}
+$\mathbcal{T}_{k}$: Set of all points in the tree after k-iterations
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+
 \subsection{Continuous Time-Variant LQR}
 
 \begin{frame}
@@ -410,7 +437,7 @@ J=\int_{t_0}^{t_f}[1+u_0^{\intercal}Ru_0] dt
 \begin{equation*}
 \dot{x} = f(x,u,t), \hspace{.23cm} x\in \mathbb{R}^n, \hspace{.3cm} u\in \mathbb{R}^m, \hspace{.3cm} t \in [t_0, t_f]
 \end{equation*} 
-\item A given trajectory $x_0(t)$, $u_0(t)$,\\ where $\bar{x}(t)=x(t)-x_0(t)$, $\bar{u}(t)=u(t)-u_0(t)$
+\item A nominal trajectory $x_0(t)$, $u_0(t)$ yields $\bar{x}(t)=x(t)-x_0(t)$, $\bar{u}(t)=u(t)-u_0(t)$
 \item Linearize around the trajectory ($x_0(t)$, $u_0(t)$), $\bar{x}\approx A(t)\bar{x}(t)+B(t)\bar{u}(t)$ 
 \item Finite time horizon LQR minimum energy cost-to-go fcn (performance index)
 \begin{equation*}
@@ -596,33 +623,93 @@ subject to & $\rho_k(t_{k+1}) \leq \rho(t_{k+1})$\\
 %------------------------------------------------
 
 \section{LQR-Tree Algorithm}
+\subsection{LQR-Tree Algorithm Characteristics}
 \begin{frame}
-\frametitle{LQR-Tree Algorithm}
-
+\frametitle{LQR-Tree Algorithm Characteristics}
+\begin{itemize}
+\item Randomized backward growing tree technique in the same fashion as RRT \vspace{.2cm} 
+\item Large web of stabilized controllers for the motion planning, given various initial conditions \vspace{.2cm} 
+\item Information for the funnels  allows for immediately discard sample points which are inside the verified region \vspace{.2cm}
+\end{itemize}
+\textbf{Objective:} \textit{Find the set of stabilizable controllers for all possible initial conditions from which the specific final goal state can be reached.}
 \end{frame}
 
 %------------------------------------------------
+
+\begin{frame}
+\subsection{LQR-Tree Implementation}
+\frametitle{LQR-Tree Algorithm}
+\textbf{Goal:} Stabilize ($x_G$, $u_G$)\vspace{.2cm}
+\begin{enumerate}
+\item Stabilize $x_G$, $u_G$ locally w/ TI-LQR\\
+\textbf{+} Compute region of attraction $\rho_c$ \vspace{.2cm}
+\item Pick a random point $x_s$\\
+If already in the funnel discard\vspace{.2cm}
+\item Perform trajectory optimization w/ constraints $x(0)=x_s$, $\text{dist}(x(t_f),\text{(tree)})=0$\\
+\textbf{+} Compute feedback cost-to-go TV-LQR\\
+\textbf{+} Compute largest funnel to land in the goal region\vspace{.2cm}
+\item Repeat
+\end{enumerate}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{LQR-Tree Pseudo-code}
+\begin{algorithm}[H]
+\begin{algorithmic}[1] % [1] is numbering
+\tiny{
+\STATE $\text{[A,B]} \Leftarrow \text{linearization of f(x,u) around }x_G, u_G$
+\STATE $\text{[K,S]} \Leftarrow \text{TI-LQR(A,B,Q,R)}$
+\STATE $\rho_c \Leftarrow \text{domain of attraction computation}$
+\STATE $\text{T.init}\{ x_G, u_G, \text{S,K}, \rho_c, \text{NULL} \}$
+\FOR{$k=1$ to $K$}
+\STATE $x_{rand} \Leftarrow \text{random sample}$
+\IF{$x_{rand} \in C_k$}
+\STATE {continue}
+\ENDIF
+\STATE{$[t,x_0(t),u_0(t)]$ from trajectory optimization }
+\IF{$x_0(t_f)\notin \mathbcal{T}_{k} $}
+\STATE {continue}
+\ENDIF
+\STATE{[K(t), S(t)] $\Leftarrow$ TV-LQR(A(t),B(t),Q,R)}
+\STATE{$\rho_c(t)\Leftarrow$ polynomial domain of attraction computation}
+\STATE{$i\Leftarrow$ pointer to branch in tree}
+\STATE{T.add-branch ($x_0(t), u_0(t), S(t), K(t), \rho_c, i$)}
+\ENDFOR
+}
+\end{algorithmic}
+\caption{LQR-Tree (f,$x_G$,$u_G$,Q,R) \cite{p1}}
+\label{algLQR}
+\end{algorithm}
+\end{frame}
+
+%------------------------------------------------
+
 \section{Conclusions}
 \begin{frame}
+\frametitle{Overview}
+\begin{itemize}
+\item Lyapunov functions and SOS \vspace{.2cm}
+\item LQR, its design and verification \vspace{.2cm}
+\item Overview of Motion planning \vspace{.2cm}
+\item RRT algorithm \vspace{.2cm}
+\item Trajectory Optimization and Time varying LQR \vspace{.2cm}
+\item LQR trees algorithm \vspace{.2cm}
+\item LQR trees in action (Simulation) \vspace{.2cm}
+\end{itemize}
+\end{frame}
+
+
+%------------------------------------------------
+\begin{frame}
 \frametitle{Conclusions}
-
-%\begin{itemize}
-%\item Today:
-%\begin{itemize}
-%\item Lyapunov functions and SOS
-%\item LQR, its design and verification
-%\item Overview of Motion planning
-%\item RRT algorithm
-%\end{itemize}
-%\vspace{.2cm}
-%\item Next week:
-%\begin{itemize}
-%\item Trajectory Optimization and Time varying LQR
-%\item LQR trees algorithm
-%\item LQR trees in action (Simulation)
-%\end{itemize}
-%\end{itemize}
-
+\begin{itemize}
+\item Computation of Lyapunov fcns w/ SoS let us build feedback motion planning algorithms \vspace{.2cm}
+\item Deal with non-linear systems w/ up to 20 states \vspace{.2cm}
+\item Offline computation of the problem \vspace{.2cm}
+\item Need to know the dynamics of the system \vspace{.2cm}
+\end{itemize}
 \end{frame}
 
 
