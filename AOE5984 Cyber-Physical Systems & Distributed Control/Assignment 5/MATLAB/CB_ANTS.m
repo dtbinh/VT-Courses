@@ -2,14 +2,14 @@
 %% George Kontoudis, Ph.D. Student, gpkont@vt.edu, www.georgekontoudis.com              
 %% Virginia Tech, Department of Mechanical Engineering                         
 %% AOE 5984: Cyber-Physical Systems & Distributed Control      
-%% Project, Cooperaive Mobile Manipulation without Communication 
-%% Constant Boost Force (CB-ANTS) - Assumption: Obect's velocity and acceleration at CoM known
+%% Semester Project, Cooperative Mobile Manipulation without Communication 
+%% Constant Boost Force (CB-ANTS) - Velocity and acceleration of object at CoM
 %% #### -------------------------------------------------------------- #### 
 clear all;
 close all;
 clc;
 %% #### -------------------------------------------------------------- ####
-%Main body
+
 tic; % start time estimation
 
 M=2; % object mass (kg)
@@ -22,12 +22,12 @@ v_t_norm=.3; % maximum velocity value (m/s)
 
 K_p=6; % gain limit to guarantee stability = 10
 
-v_dmax=.3;
+v_dmax=.3; % maximum desired velocity
 v_dx=[-.2*ones(25,1); .2*ones(25,1); .2*ones(25,1); -.2*ones(25,1) ]; % desired velocity x-axis
 v_dy=[.2*ones(25,1); .2*ones(25,1); -.2*ones(25,1); -.2*ones(25,1)]; % desired velocity y-axis
 
-v_tx=rand(20)*v_dmax; % random initial values x-axis, max(v_t)=.3
-v_ty=rand(20)*v_dmax; % random initial values y-axis, max(v_t)=.3
+v_tx=rand(N)*v_dmax; % random initial values x-axis, max(v_t)=.3
+v_ty=rand(N)*v_dmax; % random initial values y-axis, max(v_t)=.3
 
 Dt_max=(N*abs(v_dmax))/(mu_k*g); % Theorem 1 maximum time step
 Dt=.3; % value of time step
@@ -60,45 +60,49 @@ toc; % end time estimation
 %% #### -------------------------------------------------------------- ####
 % Plots
 figure (1)
-for q=1:20
-plot(t,v_tx(:,q))
+for q=1:N
+p1=plot(t,v_tx(:,q));
 hold on
 end
-plot(td, v_dx, ':bs')
-hold on
+p2=plot(td, v_dx, ':bs');
+hold off
 grid on
 ylabel('V_x [m/s]')
 xlabel('t [s]')
+legend([p1 p2],'Followers','Leader')
 
 figure (2)
-for q=1:20
-plot(t,v_ty(:,q))
+for q=1:N
+p3=plot(t,v_ty(:,q));
 hold on
 end
-plot(td, v_dy, ':bs')
-hold on
+p4=plot(td, v_dy, ':bs');
+hold off
 grid on
 ylabel('V_y [m/s]')
 xlabel('t [s]')
+legend([p3 p4],'Followers','Leader')
 
 figure (3)
-for q=1:20
-plot(td,F_fx(:,q))
+for q=1:N
+p5=plot(td,F_fx(:,q));
 hold on
 end
-plot(td, F_lx, ':bs')
-hold on
+p6=plot(td, F_lx, ':bs');
+hold off
 grid on
 ylabel('F_x [N]')
 xlabel('t [s]')
+legend([p5 p6],'Followers','Leader')
 
 figure (4)
-for q=1:20
-plot(td,F_fy(:,q))
+for q=1:N
+p7=plot(td,F_fy(:,q));
 hold on
 end
-plot(td, F_ly, ':bs')
-hold on
+p8=plot(td, F_ly, ':bs');
+hold off
 grid on
 ylabel('F_y [N]')
 xlabel('t [s]')
+legend([p7 p8],'Followers','Leader')
